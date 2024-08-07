@@ -6,9 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "http://localhost:8080",
         secure: false,
-        changeOrigin: true, // Add this line to ensure the origin header is correctly set
+        changeOrigin: true, // Ensure the origin header is correctly set
       },
     },
   },

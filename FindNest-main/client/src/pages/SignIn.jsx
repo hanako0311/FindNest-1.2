@@ -27,20 +27,18 @@ export default function SignIn() {
     }
     try {
       dispatch(signInStart());
-      const res = await fetch("/api/auth/signin", {
+      const res = await fetch("api/authenticate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (data.success === false) {
-        dispatch(signInFailure(data.message));
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to authenticate");
       }
-
-      if (res.ok) {
-        dispatch(signInSuccess(data));
-        navigate("/dashboard?tab=analytics"); // Redirect to the desired page after login
-      }
+      dispatch(signInSuccess(data));
+      localStorage.setItem("token", data.jwt);
+      navigate("/dashboard?tab=analytics"); // Redirect to the desired page after login
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
